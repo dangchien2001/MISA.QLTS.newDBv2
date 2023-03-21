@@ -25,7 +25,7 @@ namespace MISA.QLTS.DL.AssetDL
         /// Lấy mã tài sản mới
         /// </summary>
         /// <returns></returns>
-        int GetMaxAssetCode();
+        string GetMaxAssetCode();
 
         /// <summary>
         /// Hàm xóa nhiều bản ghi
@@ -40,5 +40,6 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="asset"></param>
         /// <returns></returns>
         List<Asset> DuplicateCode(Asset asset);
+
     }
 }

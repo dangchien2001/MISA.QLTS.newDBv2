@@ -82,10 +82,9 @@ namespace MISA.QLTS.BL.AssetBL
         /// <returns></returns>
         public string GetMaxAssetCode()
         {
-            int numCode = _assetDL.GetMaxAssetCode();
-            string textCode = "TS";
-            string newEmployeeCode = $"{textCode}-{++numCode}";
-            return newEmployeeCode;
+            string numCode = _assetDL.GetMaxAssetCode();
+            
+            return numCode;
         }
     }
 }

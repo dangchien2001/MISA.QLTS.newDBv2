@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using MISA.QLTS.Common.Constrants;
+using MISA.QLTS.Common.Entities;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -168,5 +169,7 @@ namespace MISA.QLTS.DL.BaseDL
 
             return numberOfAffectedRows;
         }
+
+        
     }
 }

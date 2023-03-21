@@ -51,5 +51,7 @@ namespace MISA.QLTS.DL.BaseDL
         /// 0: Nếu xóa thất bại
         /// </returns>
         int DeleteRecord(Guid recordId);
+
+        
     }
 }

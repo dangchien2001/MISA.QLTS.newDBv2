@@ -108,13 +108,31 @@ namespace MISA.QLTS.DL.AssetDL
         /// Lấy mã nhân viên mới
         /// </summary>
         /// <returns></returns>
-        public int GetMaxAssetCode()
+        /*public int GetMaxAssetCode()
         {
             var procedureName = "Proc_Asset_GetMaxCode";
             var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
             var multy = mySqlConnection.QueryMultiple(procedureName, commandType: System.Data.CommandType.StoredProcedure);
             int numCode = multy.Read<int>().Single();
             return numCode;
+        }*/
+        public string GetMaxAssetCode()
+        {
+            var sqlcmd = $"SELECT asset_code FROM asset ORDER BY created_date DESC LIMIT 1";
+            var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
+            var data = mySqlConnection.QueryFirstOrDefault<string>(sql: sqlcmd);
+            data = data.Substring(0, 3).ToString();
+
+            var dynamicParams = new DynamicParameters();
+            if (data == null)
+            {
+                data = "TS";
+            }
+            data = data + "%";
+            dynamicParams.Add("@txt", data);
+            var sqlcmd2 = $"SELECT SUBSTR(asset_code, 4) FROM asset WHERE asset_code LIKE @txt ORDER BY CAST(SUBSTR(asset_code, 4) AS SIGNED) DESC LIMIT 1";
+            var data2 = mySqlConnection.QueryFirstOrDefault<string>(sql: sqlcmd2, param: dynamicParams);
+            return (data + (Int32.Parse(data2) + 1).ToString()).Replace("%","");
         }
     }
 }
