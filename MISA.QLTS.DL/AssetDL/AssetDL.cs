@@ -50,6 +50,8 @@ namespace MISA.QLTS.DL.AssetDL
             return result;
         }
 
+
+
         /// <summary>
         /// Kiểm tra trùng mã tài sản
         /// </summary>
@@ -61,7 +63,6 @@ namespace MISA.QLTS.DL.AssetDL
             var storedProcedureName = "Proc_Asset_Duplicate_Code";
             var parameters = new DynamicParameters();
             parameters.Add("p_asset_code", Asset.asset_code);
-            parameters.Add("p_asset_id", Asset.asset_id);
             dynamic result;
             using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
             {
@@ -78,7 +79,7 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <returns></returns>
-        public PagingResult GetAssetsByFilter([FromQuery] string? assetFilter, [FromQuery] int pageSize = 10, [FromQuery] int pageNumber = 1)
+        public PagingResult GetAssetsByFilter([FromQuery] string? assetFilter, [FromQuery] string? departmentFilter, [FromQuery] string? assetCategoryFilter, [FromQuery] int pageSize = 10, [FromQuery] int pageNumber = 1)
         {
             string storedProcedureName = string.Format(ProcedureName.Filter, typeof(Asset).Name);
 
@@ -86,21 +87,51 @@ namespace MISA.QLTS.DL.AssetDL
             parameters.Add("p_page_size", pageSize);
             parameters.Add("p_page_number", pageNumber);
             parameters.Add("p_asset_filter", assetFilter);
+            parameters.Add("p_department_filter", departmentFilter);
+            parameters.Add("p_asset_category_filter", assetCategoryFilter);
 
             var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
             mySqlConnection.Open();
 
             var getAssetFilter = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
-            //int totalRecords = getAssetFilter.Read<int>().Single();
+            int totalRecords = getAssetFilter.Read<int>().Single();
             var AssetFilters = getAssetFilter.Read<Asset>().ToList();
-            //double totalPage = Convert.ToDouble(totalRecords) / pageSize;
+            double totalPage = Convert.ToDouble(totalRecords) / pageSize;
             return new PagingResult
             {
                 CurrentPage = pageNumber,
                 CurrentPageRecords = pageSize,
-                //TotalPage = Convert.ToInt32(Math.Ceiling(totalPage)),
-                //TotalRecord = totalRecords,
+                TotalPage = Convert.ToInt32(Math.Ceiling(totalPage)),
+                TotalRecord = totalRecords,
                 Data = AssetFilters
+            };
+        }
+
+        /// <summary>
+        /// Lấy tổng số bản ghi, số lượng, nguyên giá, hao mòn lũy kế
+        /// </summary>
+        /// <returns></returns>
+        public TotalResult GetTotalResults()
+        {
+            // Chuẩn bị tên stored
+            string storedProcedureName = String.Format(ProcedureName.Get, typeof(Asset).Name, "All");
+            // Khởi tạo kết nối tới Database
+            List<Asset> listRecords;
+            var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
+            mySqlConnection.Open();
+
+            var result = mySqlConnection.QueryMultiple(storedProcedureName, commandType: CommandType.StoredProcedure);
+            var totalRecords = result.Read<int>().Single();
+            listRecords = result.Read<Asset>().ToList();
+            var totalQuantity = result.Read<int>().Single();
+            var totalDepreciationValue = result.Read<decimal>().Single();
+            var totalPrice = result.Read<decimal>().Single();
+            return new TotalResult
+            {
+                TotalRecord = totalRecords,
+                TotalQuantity = totalQuantity,
+                TotalDepreciationValue = totalDepreciationValue,
+                TotalPrice = totalPrice
             };
         }
 
@@ -108,14 +139,6 @@ namespace MISA.QLTS.DL.AssetDL
         /// Lấy mã nhân viên mới
         /// </summary>
         /// <returns></returns>
-        /*public int GetMaxAssetCode()
-        {
-            var procedureName = "Proc_Asset_GetMaxCode";
-            var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
-            var multy = mySqlConnection.QueryMultiple(procedureName, commandType: System.Data.CommandType.StoredProcedure);
-            int numCode = multy.Read<int>().Single();
-            return numCode;
-        }*/
         public string GetMaxAssetCode()
         {
             var sqlcmd = $"SELECT asset_code FROM asset ORDER BY created_date DESC LIMIT 1";

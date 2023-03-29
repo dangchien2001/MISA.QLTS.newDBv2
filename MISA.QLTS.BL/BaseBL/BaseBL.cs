@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static MISA.QLTS.Common.Attributes.QLTSAttributes;
 
 namespace MISA.QLTS.BL.BaseBL
 {
@@ -124,7 +125,6 @@ namespace MISA.QLTS.BL.BaseBL
             //Lấy toàn bộ property của class asset
             var properties = typeof(T).GetProperties();
 
-            //Kiểm tra xem property nào có attribute là required
             ServiceResult lstValidate = new ServiceResult();
 
             lstValidate.IsSuccess = true;
@@ -134,30 +134,62 @@ namespace MISA.QLTS.BL.BaseBL
             {
                 var propertyName = property.Name;
                 var propertyValue = property.GetValue(record);
+
                 var requiredAttribute = (RequiredAttribute)property.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault();
                 if (requiredAttribute != null && string.IsNullOrEmpty(propertyValue.ToString()))
                 {
                     lstEmpty.Add(requiredAttribute.ErrorMessage);
-                }
-
-                if (propertyValue != null && !string.IsNullOrEmpty(propertyValue.ToString()))
-                {
-                    DateTime datetime;
-                    if (DateTime.TryParse(propertyValue.ToString(), out datetime))
-                    {
-                        DateTime time = DateTime.Parse(propertyValue.ToString());
-                        if (time > DateTime.Now)
-                        {
-                            lstEmpty.Add(Resource.FormatDate);
-                        }
-                    }
-                }
+                }               
             }
             var result = ValidateCustom(record);
             if (result != null)
             {
                 lstValidate.IsSuccess = false;
-                lstValidate.ErrorCode = result.ErrorCode;
+                lstValidate.ErrorCode = ErrorCode.DuplicateCode;
+                lstValidate.Data = result.Data;
+            }
+            if (lstEmpty.Count > 0)
+            {
+                lstValidate.IsSuccess = false;
+                lstValidate.ErrorCode = ErrorCode.IsValidData;
+                lstValidate.Data = lstEmpty;
+            }
+            return lstValidate;
+        }
+
+        /// <summary>
+        /// Hàm validate required phục vụ update
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="recordId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        protected virtual ServiceResult ValidateData(T? record, Guid recordId)
+        {
+            //Lấy toàn bộ property của class asset
+            var properties = typeof(T).GetProperties();
+
+            ServiceResult lstValidate = new ServiceResult();
+
+            lstValidate.IsSuccess = true;
+            List<string> lstEmpty = new List<string>();
+            lstEmpty.Clear();
+            foreach (var property in properties)
+            {
+                var propertyName = property.Name;
+                var propertyValue = property.GetValue(record);
+
+                var requiredAttribute = (RequiredAttribute)property.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault();
+                if (requiredAttribute != null && string.IsNullOrEmpty(propertyValue.ToString()))
+                {
+                    lstEmpty.Add(requiredAttribute.ErrorMessage);
+                }
+            }
+            var result = ValidateCustom(record, recordId);
+            if (result != null)
+            {
+                lstValidate.IsSuccess = false;
+                lstValidate.ErrorCode = ErrorCode.DuplicateCode;
                 lstValidate.Data = result.Data;
             }
             if (lstEmpty.Count > 0)
@@ -174,10 +206,15 @@ namespace MISA.QLTS.BL.BaseBL
             return new ServiceResult();
         }
 
+        protected virtual ServiceResult ValidateCustom(T? record, Guid? recordId)
+        {
+            return new ServiceResult();
+        }
+
         public ServiceResult UpdateRecord(Guid recordId, T record)
         {
             ServiceResult validateResults = new ServiceResult();
-            validateResults = ValidateData(record);
+            validateResults = ValidateData(record, recordId);
             // Thất bại -- return lỗi
 
             if (!validateResults.IsSuccess && validateResults.ErrorCode == ErrorCode.IsValidData)

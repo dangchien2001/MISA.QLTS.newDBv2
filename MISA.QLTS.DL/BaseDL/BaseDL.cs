@@ -55,6 +55,7 @@ namespace MISA.QLTS.DL.BaseDL
             using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
             {
                 var result = mySqlConnection.QueryMultiple(storedProcedureName, commandType: CommandType.StoredProcedure);
+                var totalRecords = result.Read<int>().Single();
                 listRecords = result.Read<T>().ToList();
             }
             // Xử lý kết quả trả về

@@ -175,6 +175,16 @@ namespace MISA.QLTS.API.Controllers
                         TraceId = HttpContext.TraceIdentifier
                     });
                 }
+                else if (!result.IsSuccess && result.ErrorCode == Common.Enums.ErrorCode.DuplicateCode)
+                {
+                    return StatusCode(StatusCodes.Status409Conflict, new ErrorResult
+                    {
+                        ErrorCode = result.ErrorCode,
+                        MoreInfo = result.Data,
+                        DevMsg = result.Message,
+                        TraceId = HttpContext.TraceIdentifier
+                    });
+                }
                 else
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResult

@@ -61,6 +61,15 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngày mua phải nhỏ hơn ngày sử dụng.
+        /// </summary>
+        public static string ConditionalDate {
+            get {
+                return ResourceManager.GetString("ConditionalDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tên tài sản không được để trống.
         /// </summary>
         public static string EmptyAssetName {

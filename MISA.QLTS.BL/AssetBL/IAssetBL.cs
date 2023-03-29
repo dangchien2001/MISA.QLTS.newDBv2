@@ -21,8 +21,11 @@ namespace MISA.QLTS.BL.AssetBL
         /// <returns></returns>
         PagingResult GetAssetsByFilter(
             [FromQuery] string? assetFilter,
+            [FromQuery] string? departmentFilter, 
+            [FromQuery] string? assetCategoryFilter,
             [FromQuery] int pageSize = 10,
             [FromQuery] int pageNumber = 1);
+
         /// <summary>
         /// Lấy mã tài sản mới
         /// </summary>
@@ -42,5 +45,12 @@ namespace MISA.QLTS.BL.AssetBL
         /// <param name="asset"></param>
         /// <returns></returns>
         bool DuplicateCode(Asset asset);
+
+
+        /// <summary>
+        /// Lấy tổng số bản ghi, số lượng, nguyên giá, hao mòn lũy kế
+        /// </summary>
+        /// <returns></returns>
+        TotalResult GetTotalResults();
     }
 }

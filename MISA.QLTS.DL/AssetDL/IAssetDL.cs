@@ -19,7 +19,7 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <returns></returns>
-        PagingResult GetAssetsByFilter([FromQuery] string? assetFilter,[FromQuery] int pageSize = 10,[FromQuery] int pageNumber = 1);
+        PagingResult GetAssetsByFilter([FromQuery] string? assetFilter, [FromQuery] string? departmentFilter, [FromQuery] string? assetCategoryFilter, [FromQuery] int pageSize = 10,[FromQuery] int pageNumber = 1);
 
         /// <summary>
         /// Lấy mã tài sản mới
@@ -40,6 +40,12 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="asset"></param>
         /// <returns></returns>
         List<Asset> DuplicateCode(Asset asset);
+
+        /// <summary>
+        /// Lấy tổng số bản ghi, số lượng, nguyên giá, hao mòn lũy kế
+        /// </summary>
+        /// <returns></returns>
+        TotalResult GetTotalResults();
 
     }
 }

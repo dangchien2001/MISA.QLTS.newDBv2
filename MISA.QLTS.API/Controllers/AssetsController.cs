@@ -57,13 +57,15 @@ namespace MISA.QLTS.API.Controllers
         [HttpGet("filter")]
         public IActionResult GetAssetsByFilter(
             [FromQuery] string? assetFilter,
+            [FromQuery] string? departmentFilter,
+            [FromQuery] string? assetCategoryFilter,
             [FromQuery] int pageSize = 10,
             [FromQuery] int pageNumber = 1)
         {
             try
             {
                 var result = new PagingResult();
-                result = _assetBL.GetAssetsByFilter(assetFilter, pageSize, pageNumber);
+                result = _assetBL.GetAssetsByFilter(assetFilter, departmentFilter, assetCategoryFilter, pageSize, pageNumber);
                 return StatusCode(StatusCodes.Status200OK, result);
             }
             catch (Exception ex)
@@ -96,6 +98,28 @@ namespace MISA.QLTS.API.Controllers
                         DevMsg = Resource.SystemError,
                     });
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return ErrorException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Lấy tổng số bản ghi, số lượng, nguyên giá, hao mòn lũy kế
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("totalResults")]
+        public IActionResult GetTotalResults()
+        {
+            try
+            {
+                TotalResult listRecords;
+                listRecords = _assetBL.GetTotalResults();
+                // Xử lý kết quả trả về
+                // Thành công
+                return StatusCode(StatusCodes.Status200OK, listRecords);
             }
             catch (Exception ex)
             {
