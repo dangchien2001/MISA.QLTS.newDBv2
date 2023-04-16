@@ -25,14 +25,12 @@ namespace MISA.QLTS.Common.Entities
         /// Mã tài sản
         /// </summary>
         [Required(ErrorMessage = "Mã tài sản không được bỏ trống")]
-        [StringLength(4, ErrorMessage = "Mã tài sản không vượt quá 20 ký tự")]
         public string asset_code { get; set; }
 
         /// <summary>
         /// Tên tài sản
         /// </summary>
         [Required(ErrorMessage = "Tên tài sản không được bỏ trống")]
-        [StringLength(3, ErrorMessage = "Tên tài sản không vượt quá 20 ký tự")]
         public string asset_name { get; set; }
 
         /// <summary>
@@ -53,12 +51,13 @@ namespace MISA.QLTS.Common.Entities
         /// <summary>
         /// id phòng ban
         /// </summary>
-        [ForeignKey("Mã phòng ban không được để trống")]
+        [ForeignKey("Id phòng ban không được để trống")]
         public Guid department_id { get; set; }
 
         /// <summary>
         /// mã phòng ban
         /// </summary>
+        [Required(ErrorMessage = "Mã phòng ban không được bỏ trống")]
         public string? department_code { get; set; }
 
         /// <summary>
@@ -69,12 +68,13 @@ namespace MISA.QLTS.Common.Entities
         /// <summary>
         /// id loại tài sản
         /// </summary>
-        [ForeignKey("Mã loại tài sản không được để trống")]
+        [ForeignKey("Id loại tài sản không được để trống")]
         public Guid asset_category_id { get; set; }
 
         /// <summary>
         /// mã loại tài sản
         /// </summary>
+        [Required(ErrorMessage = "Mã loại tài sản không được bỏ trống")]
         public string? asset_category_code { get; set; }
 
         /// <summary>

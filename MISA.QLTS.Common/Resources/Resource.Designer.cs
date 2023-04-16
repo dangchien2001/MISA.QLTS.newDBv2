@@ -70,6 +70,24 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã loại tài sản không được để trống.
+        /// </summary>
+        public static string EmptyAssetCategoryCode {
+            get {
+                return ResourceManager.GetString("EmptyAssetCategoryCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id loại tài sản không được để trống.
+        /// </summary>
+        public static string EmptyAssetCategoryId {
+            get {
+                return ResourceManager.GetString("EmptyAssetCategoryId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tên tài sản không được để trống.
         /// </summary>
         public static string EmptyAssetName {
@@ -84,6 +102,87 @@ namespace MISA.QLTS.Common.Resources {
         public static string EmptyCode {
             get {
                 return ResourceManager.GetString("EmptyCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nguyên giá không được bỏ trống.
+        /// </summary>
+        public static string EmptyCost {
+            get {
+                return ResourceManager.GetString("EmptyCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã phòng ban không được để trống.
+        /// </summary>
+        public static string EmptyDepartmentCode {
+            get {
+                return ResourceManager.GetString("EmptyDepartmentCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id phòng ban không được để trống.
+        /// </summary>
+        public static string EmptyDepartmentId {
+            get {
+                return ResourceManager.GetString("EmptyDepartmentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tỷ lệ hao mòn không được bỏ trống.
+        /// </summary>
+        public static string EmptyDepreciationRate {
+            get {
+                return ResourceManager.GetString("EmptyDepreciationRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Số năm sử dụng không được bỏ trống.
+        /// </summary>
+        public static string EmptyLifeTime {
+            get {
+                return ResourceManager.GetString("EmptyLifeTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày sử dụng không được bỏ trống.
+        /// </summary>
+        public static string EmptyProductionYear {
+            get {
+                return ResourceManager.GetString("EmptyProductionYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày mua không được bỏ trống.
+        /// </summary>
+        public static string EmptyPurchaseDate {
+            get {
+                return ResourceManager.GetString("EmptyPurchaseDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Số lượng không được bỏ trống.
+        /// </summary>
+        public static string EmptyQuantity {
+            get {
+                return ResourceManager.GetString("EmptyQuantity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Năm bắt đầu theo dõi sản phẩm không được bỏ trống.
+        /// </summary>
+        public static string EmptyTrackedYear {
+            get {
+                return ResourceManager.GetString("EmptyTrackedYear", resourceCulture);
             }
         }
         

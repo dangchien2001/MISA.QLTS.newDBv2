@@ -19,7 +19,12 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <returns></returns>
-        PagingResult GetAssetsByFilter([FromQuery] string? assetFilter, [FromQuery] string? departmentFilter, [FromQuery] string? assetCategoryFilter, [FromQuery] int pageSize = 10,[FromQuery] int pageNumber = 1);
+        PagingResult GetAssetsByFilter(
+            [FromQuery] string? assetFilter, 
+            [FromQuery] string? departmentFilter, 
+            [FromQuery] string? assetCategoryFilter, 
+            [FromQuery] int pageSize = 10,
+            [FromQuery] int pageNumber = 1);
 
         /// <summary>
         /// Lấy mã tài sản mới
@@ -46,6 +51,21 @@ namespace MISA.QLTS.DL.AssetDL
         /// </summary>
         /// <returns></returns>
         TotalResult GetTotalResults();
+
+        /// <summary>
+        /// lấy thông tin dành cho phân trang 
+        /// </summary>
+        /// <param name="assetFilter">từ khóa tìm kiếm</param>
+        /// <param name="departmentFilter">mã phòng ban tìm kiếm</param>
+        /// <param name="assetCategoryFilter">Mã loại tài sản tìm kiếm</param>
+        /// <returns></returns>
+        public IEnumerable<AssetExport> Getpage(string? txtSearch, Guid? DepartmentId, Guid? AssetCategoryId);
+
+        /// <summary>
+        /// Export dữ liệu ra file excel
+        /// </summary>
+        /// <returns></returns>
+        List<AssetExport> ExportToExcel();
 
     }
 }

@@ -121,6 +121,14 @@
     <value>Ngày mua phải nhỏ hơn ngày sử dụng</value>
     <comment>Lỗi điều kiện ngày</comment>
   </data>
+  <data name="EmptyAssetCategoryCode" xml:space="preserve">
+    <value>Mã loại tài sản không được để trống</value>
+    <comment>Lỗi loại tài sản để trống</comment>
+  </data>
+  <data name="EmptyAssetCategoryId" xml:space="preserve">
+    <value>Id loại tài sản không được để trống</value>
+    <comment>Lỗi loại tài sản để trống</comment>
+  </data>
   <data name="EmptyAssetName" xml:space="preserve">
     <value>Tên tài sản không được để trống</value>
     <comment>Lỗi để trống tên tài sản</comment>
@@ -128,6 +136,42 @@
   <data name="EmptyCode" xml:space="preserve">
     <value>Mã tài sản không được để trống</value>
     <comment>Lỗi để trống mã tài sản</comment>
+  </data>
+  <data name="EmptyCost" xml:space="preserve">
+    <value>Nguyên giá không được bỏ trống</value>
+    <comment>Lỗi bỏ trống nguyên giá</comment>
+  </data>
+  <data name="EmptyDepartmentCode" xml:space="preserve">
+    <value>Mã phòng ban không được để trống</value>
+    <comment>Lỗi phòng ban để trống</comment>
+  </data>
+  <data name="EmptyDepartmentId" xml:space="preserve">
+    <value>Id phòng ban không được để trống</value>
+    <comment>Lỗi phòng ban để trống</comment>
+  </data>
+  <data name="EmptyDepreciationRate" xml:space="preserve">
+    <value>Tỷ lệ hao mòn không được bỏ trống</value>
+    <comment>Lỗi bỏ trống tỷ lệ hao mòn</comment>
+  </data>
+  <data name="EmptyLifeTime" xml:space="preserve">
+    <value>Số năm sử dụng không được bỏ trống</value>
+    <comment>Lỗi bỏ trống số năm sử dụng</comment>
+  </data>
+  <data name="EmptyProductionYear" xml:space="preserve">
+    <value>Ngày sử dụng không được bỏ trống</value>
+    <comment>Lỗi bỏ trống ngày sử dụng</comment>
+  </data>
+  <data name="EmptyPurchaseDate" xml:space="preserve">
+    <value>Ngày mua không được bỏ trống</value>
+    <comment>Lỗi bỏ trống ngày mua</comment>
+  </data>
+  <data name="EmptyQuantity" xml:space="preserve">
+    <value>Số lượng không được bỏ trống</value>
+    <comment>Lỗi bỏ trống số lượng</comment>
+  </data>
+  <data name="EmptyTrackedYear" xml:space="preserve">
+    <value>Năm bắt đầu theo dõi sản phẩm không được bỏ trống</value>
+    <comment>Lỗi bỏ trống năm theo dõi sản phẩm</comment>
   </data>
   <data name="ErrorDuplicate" xml:space="preserve">
     <value>Mã tài sản đã tồn tại</value>

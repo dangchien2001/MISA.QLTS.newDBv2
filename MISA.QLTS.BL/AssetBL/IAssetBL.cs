@@ -52,5 +52,17 @@ namespace MISA.QLTS.BL.AssetBL
         /// </summary>
         /// <returns></returns>
         TotalResult GetTotalResults();
+
+        /// <summary>
+        /// Export dữ liệu ra file excel
+        /// </summary>
+        /// <returns></returns>
+        List<AssetExport> ExportToExcel();
+
+        /// <summary>
+        /// Xuất khẩu tất cả nhân viên ra excel
+        /// </summary>
+        /// <returns>URL tải excle xuống </returns>
+        public Stream ExportAssets(string? txtSearch, Guid? DepartmentId, Guid? AssetCategoryId);
     }
 }

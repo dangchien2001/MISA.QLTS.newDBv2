@@ -4,6 +4,9 @@ using MISA.QLTS.BL.AssetBL;
 using MISA.QLTS.Common.Entities;
 using MISA.QLTS.Common.Entities.DTO;
 using MISA.QLTS.Common.Resources;
+using OfficeOpenXml.Style;
+using OfficeOpenXml;
+using System.Drawing;
 
 namespace MISA.QLTS.API.Controllers
 {
@@ -80,7 +83,7 @@ namespace MISA.QLTS.API.Controllers
         /// </summary>
         /// <param name="assetIds"></param>
         /// <returns></returns>
-        [HttpDelete("assetIds")]
+        [HttpDelete]
         public IActionResult DeleteAssetMore(List<Guid> assetIds)
         {
             try
@@ -143,6 +146,29 @@ namespace MISA.QLTS.API.Controllers
             };
             return StatusCode(StatusCodes.Status500InternalServerError, errorExp);
         }
+
+        /// <summary>
+        /// xuất khẩu danh sách tài sản
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Export")]
+        public IActionResult Export(string? txtSearch, Guid? DepartmentId, Guid? AssetCategoryId)
+        {
+            try
+            {
+                var stream = _assetBL.ExportAssets(txtSearch, DepartmentId, AssetCategoryId);
+                stream.Position = 0;
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            }
+            catch (Exception ex)
+            {
+                return ErrorException(ex);
+            }
+        }
+
+
+        
 
         #endregion
     }
