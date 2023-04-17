@@ -3,11 +3,14 @@ using MISA.QLTS.BL.AssetBL;
 using MISA.QLTS.BL.AssetCategoryBL;
 using MISA.QLTS.BL.BaseBL;
 using MISA.QLTS.BL.DepartmentBL;
+using MISA.QLTS.BL.VoucherBL;
+using MISA.QLTS.BL.VoucherBL;
 using MISA.QLTS.DL.AssetCategoryDL;
 using MISA.QLTS.DL.AssetDL;
 using MISA.QLTS.DL.BaseDL;
 using MISA.QLTS.DL.Datacontext;
 using MISA.QLTS.DL.DepartmentDL;
+using MISA.QLTS.DL.VoucherDL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +53,9 @@ builder.Services.AddScoped<IDepartmentDL, DepartmentDL>();
 
 builder.Services.AddScoped<IAssetCategoryBL, AssetCategoryBL>();
 builder.Services.AddScoped<IAssetCategoryDL, AssetCategoryDL>();
+
+builder.Services.AddScoped<IVoucherBL, VoucherBL>();
+builder.Services.AddScoped<IVoucherDL, VoucherDL>();
 
 var app = builder.Build();
 
