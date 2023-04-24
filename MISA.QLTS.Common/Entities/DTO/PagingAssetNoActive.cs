@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MISA.QLTS.Common.Entities.DTO
 {
-    public class PagingResult
+    public class PagingAssetNoActive
     {
         /// <summary>
         /// Tổng số trang
@@ -17,26 +17,6 @@ namespace MISA.QLTS.Common.Entities.DTO
         /// Tổng số bản ghi
         /// </summary>
         public int TotalRecord { get; set; }
-
-        /// <summary>
-        /// Tổng số lượng tài sản
-        /// </summary>
-        public int TotalQuantity { get; set; }
-
-        /// <summary>
-        /// Tổng nguyên giá
-        /// </summary>
-        public decimal TotalCost { get; set; }
-
-        /// <summary>
-        /// Tổng hao mòn lũy kế
-        /// </summary>
-        public decimal TotalDepreciationValue { get; set; }
-
-        /// <summary>
-        /// Tổng giá trị còn lại
-        /// </summary>
-        public decimal TotalResidualValue { get; set; }
 
         /// <summary>
         /// Trang hiện tại
@@ -52,7 +32,5 @@ namespace MISA.QLTS.Common.Entities.DTO
         /// Danh sách dữ liệu
         /// </summary>
         public List<AssetExport> Data { get; set; }
-
-
     }
 }

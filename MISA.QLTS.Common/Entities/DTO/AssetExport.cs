@@ -9,6 +9,16 @@ namespace MISA.QLTS.Common.Entities.DTO
     public class AssetExport
     {
         /// <summary>
+        /// Số thứ tự
+        /// </summary>
+        public int? row_index { get; set; }
+
+        /// <summary>
+        /// Mã tài sản
+        /// </summary>
+        public Guid asset_id { get; set; }
+
+        /// <summary>
         /// Mã tài sản
         /// </summary>
         public String asset_code { get; set; }

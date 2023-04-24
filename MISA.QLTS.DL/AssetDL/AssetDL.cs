@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace MISA.QLTS.DL.AssetDL
 {
+
     public class AssetDL : BaseDL<Asset>, IAssetDL
     {
         /// <summary>
@@ -83,7 +84,7 @@ namespace MISA.QLTS.DL.AssetDL
         }
 
         /// <summary>
-        /// API lấy danh sách nhân viên lọc theo trang
+        /// API lấy danh sách tài sản lọc theo trang
         /// </summary>
         /// <param name="assetFilter"></param>
         /// <param name="pageSize"></param>
@@ -106,7 +107,7 @@ namespace MISA.QLTS.DL.AssetDL
             var getAssetFilter = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
 
             int totalAllRecords = getAssetFilter.Read<int>().Single();
-            var AssetFilters = getAssetFilter.Read<Asset>().ToList();
+            var AssetFilters = getAssetFilter.Read<AssetExport>().ToList();
             int totalRecords = getAssetFilter.Read<int>().Single();
             int totalQuantity = getAssetFilter.Read<int>().Single();
             decimal totalCost = getAssetFilter.Read<decimal>().Single();
@@ -218,6 +219,55 @@ namespace MISA.QLTS.DL.AssetDL
             var multy = mySqlConnection.QueryMultiple(storedProcedureName, commandType: System.Data.CommandType.StoredProcedure);
             result = multy.Read<AssetExport>().ToList();
             return result;
+        }
+
+        /// <summary>
+        /// API lấy danh sách tài sản chưa active lọc theo trang
+        /// </summary>
+        /// <param name="assetFilter"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
+        public PagingAssetNoActive GetAssetsNoActiveByFilter(
+            [FromBody] List<string>? assetCodes,
+            [FromQuery] string? assetFilter, 
+            [FromQuery] int pageSize = 10, 
+            [FromQuery] int pageNumber = 1)            
+        {
+            // Khởi tạo câu lệnh sql
+            var result = 0;
+            var stringFormat = $"('{string.Join("','", assetCodes)}')";
+
+            // chuẩn bị tên procedure
+            string storedProcedureName = "Proc_Asset_NonActive_Search_Paging";
+
+            // chuẩn bị tham số đầu vào
+            var parameters = new DynamicParameters();
+            parameters.Add("p_page_size", pageSize);
+            parameters.Add("p_page_number", pageNumber);
+            parameters.Add("p_asset_filter", assetFilter);
+            parameters.Add("p_list", stringFormat);
+
+            // gọi db
+            var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);
+            mySqlConnection.Open();
+
+            var getAssetFilter = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+
+            int totalAllRecords = getAssetFilter.Read<int>().Single();
+            var AssetFilters = getAssetFilter.Read<AssetExport>().ToList();
+
+            double totalPage = Convert.ToDouble(totalAllRecords) / pageSize;
+            mySqlConnection.Close();
+
+            return new PagingAssetNoActive
+            {
+                CurrentPage = pageNumber,
+                CurrentPageRecords = pageSize,
+                TotalPage = Convert.ToInt32(Math.Ceiling(totalPage)),
+                TotalRecord = totalAllRecords,
+                Data = AssetFilters
+            };
         }
     }
 }

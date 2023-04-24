@@ -64,5 +64,18 @@ namespace MISA.QLTS.BL.AssetBL
         /// </summary>
         /// <returns>URL tải excle xuống </returns>
         public Stream ExportAssets(string? txtSearch, Guid? DepartmentId, Guid? AssetCategoryId);
+
+        /// <summary>
+        /// API lấy danh sách tài sản chưa active lọc theo trang
+        /// </summary>
+        /// <param name="assetFilter"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
+        PagingAssetNoActive GetAssetsNoActiveByFilter(
+            [FromBody] List<string>? assetCodes,
+            [FromQuery] string? assetFilter,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] int pageNumber = 1);
     }
 }

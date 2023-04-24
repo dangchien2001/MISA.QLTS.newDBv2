@@ -332,5 +332,22 @@ namespace MISA.QLTS.BL.AssetBL
 
             return strRev;
         }
+
+        /// <summary>
+        /// API lấy danh sách tài sản chưa active lọc theo trang
+        /// </summary>
+        /// <param name="assetFilter"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
+        public PagingAssetNoActive GetAssetsNoActiveByFilter(
+            [FromBody] List<string>? assetCodes,
+            [FromQuery] string? assetFilter, 
+            [FromQuery] int pageSize = 10, 
+            [FromQuery] int pageNumber = 1)
+        {
+            var result = _assetDL.GetAssetsNoActiveByFilter(assetCodes, assetFilter, pageSize, pageNumber);
+            return result;
+        }
     }
 }

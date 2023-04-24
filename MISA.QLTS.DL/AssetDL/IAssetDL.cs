@@ -13,7 +13,7 @@ namespace MISA.QLTS.DL.AssetDL
     public interface IAssetDL : IBaseDL<Asset>
     {
         /// <summary>
-        /// API lấy danh sách nhân viên lọc theo trang
+        /// API lấy danh sách tài sản lọc theo trang
         /// </summary>
         /// <param name="assetFilter"></param>
         /// <param name="pageSize"></param>
@@ -25,6 +25,20 @@ namespace MISA.QLTS.DL.AssetDL
             [FromQuery] string? assetCategoryFilter, 
             [FromQuery] int pageSize = 10,
             [FromQuery] int pageNumber = 1);
+
+        /// <summary>
+        /// API lấy danh sách tài sản chưa active lọc theo trang
+        /// </summary>
+        /// <param name="assetFilter"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="pageNumber"></param>
+        /// <returns></returns>
+        PagingAssetNoActive GetAssetsNoActiveByFilter(
+            [FromBody] List<string>? assetCodes,
+            [FromQuery] string? assetFilter,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] int pageNumber = 1);
+
 
         /// <summary>
         /// Lấy mã tài sản mới
@@ -66,6 +80,7 @@ namespace MISA.QLTS.DL.AssetDL
         /// </summary>
         /// <returns></returns>
         List<AssetExport> ExportToExcel();
+
 
     }
 }

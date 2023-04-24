@@ -167,8 +167,26 @@ namespace MISA.QLTS.API.Controllers
             }
         }
 
+        [HttpPost("NoActive")]
+        public IActionResult GetAssetsNoActiveByFilter(
+            [FromBody] List<string>? assetCodes,
+            [FromQuery] string? assetFilter, 
+            [FromQuery] int pageSize = 10, 
+            [FromQuery] int pageNumber = 1)
+        {
+            try
+            {
+                var result = new PagingAssetNoActive();
+                result = _assetBL.GetAssetsNoActiveByFilter(assetCodes, assetFilter, pageSize, pageNumber);
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return ErrorException(ex);
+            }
+        }
 
-        
 
         #endregion
     }
