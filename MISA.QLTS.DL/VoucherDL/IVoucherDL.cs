@@ -49,5 +49,13 @@ namespace MISA.QLTS.DL.VoucherDL
         /// <param name="assetIds">danh sách tài sản</param>
         /// <returns>Số bản ghi ảnh hưởng</returns>
         int UpdateAsset(List<Guid> assetIds);
+
+        /// <summary>
+        /// Lấy mã lớn nhất của voucher
+        /// </summary>
+        /// <returns></returns>
+        string GetMaxCode();
+
+        decimal TotalCost();
     }
 }

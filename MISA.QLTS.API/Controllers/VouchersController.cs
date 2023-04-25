@@ -123,6 +123,21 @@ namespace MISA.QLTS.API.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, errorExp);
         }
 
+        [HttpGet("maxCode")]
+        public IActionResult GetMaxCode()
+        {
+            try
+            {
+                string result = _voucherBL.GetMaxCode();
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return ErrorException(ex);
+            }
+        }
+
 
         #endregion
     }

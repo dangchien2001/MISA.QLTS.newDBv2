@@ -45,5 +45,11 @@ namespace MISA.QLTS.BL.VoucherBL
         /// <param name="assetIds">danh sách tài sản</param>
         /// <returns>Số bản ghi ảnh hưởng</returns>
         ServiceResult UpdateAsset(List<Guid> assetIds);
+
+        /// <summary>
+        /// Lấy mã lớn nhất của voucher
+        /// </summary>
+        /// <returns></returns>
+        string GetMaxCode();
     }
 }

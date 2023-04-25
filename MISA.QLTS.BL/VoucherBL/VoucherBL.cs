@@ -9,8 +9,10 @@ using MISA.QLTS.DL.DepartmentDL;
 using MISA.QLTS.DL.VoucherDL;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MISA.QLTS.BL.VoucherBL
@@ -172,6 +174,37 @@ namespace MISA.QLTS.BL.VoucherBL
                     Message = "Lỗi thêm mới khi gọi vào DL",
                 };
             }
+        }
+
+        /// <summary>
+        /// Lấy mã lớn nhất của voucher
+        /// </summary>
+        /// <returns></returns>
+        public string GetMaxCode()
+        {
+            // gỡ chữ và số riêng
+            var text = "";
+            var number = "";
+            var result = _voucherDL.GetMaxCode();
+            var regex = new Regex(@"(\D)");
+            for(int i = result.Length - 1; i > 0; i--)
+            {
+                if (regex.IsMatch(result[i].ToString()))
+                {
+                    text = result.Substring(0, i + 1);
+                    break;
+                }
+                number = result[i].ToString() + number;
+            }
+
+            // logic lấy mã lớn nhất bằng cách cộng 1 với số vừa tách và cho vào chuỗi có số 0 ở đầu
+            int newNumber = Int32.Parse(number) + 1;
+            string stringZero = "";
+            for(int i = 0;i<(result.Length - text.Length);i++)
+            {
+                stringZero = string.Concat(stringZero, 0);
+            }
+            return string.Concat(text, newNumber.ToString(stringZero));
         }
 
         #endregion

@@ -203,5 +203,27 @@ namespace MISA.QLTS.DL.VoucherDL
             }
             return result;
         }
+
+        /// <summary>
+        /// Lấy mã lớn nhất của voucher
+        /// </summary>
+        /// <returns></returns>
+        public string GetMaxCode()
+        {
+            var result = "";
+            // Chuẩn bị tên stored procedure
+            string storedProcedureName = "Proc_Voucher_GetFirst";
+            // Khởi tạo kết nối tới Database
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                result = mySqlConnection.QueryFirstOrDefault<string>(storedProcedureName, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        public decimal TotalCost()
+        {
+            return 0;
+        }
     }       
 }
