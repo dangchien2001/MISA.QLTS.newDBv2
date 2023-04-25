@@ -207,6 +207,36 @@ namespace MISA.QLTS.BL.VoucherBL
             return string.Concat(text, newNumber.ToString(stringZero));
         }
 
+        /// <summary>
+        /// Cập nhật nguyên giá chứng từ
+        /// </summary>
+        /// <param name="assetIds">danh sách id tài sản</param>
+        /// <param name="voucherId">id chứng từ</param>
+        /// <returns>thành công: isSuccess = true, thất bại: isSuccess = false</returns>
+        public ServiceResult UpdateCost(List<Guid> assetIds, Guid voucherId)
+        {
+            var numberOfAffectedResult = _voucherDL.UpdateCost(assetIds, voucherId);
+            if (numberOfAffectedResult > 0)
+            {
+                return new ServiceResult
+                {
+                    IsSuccess = true,
+                };
+            }
+            else
+            {
+                //Kết quả trả về
+                return new ServiceResult
+                {
+                    IsSuccess = false,
+                    ErrorCode = Common.Enums.ErrorCode.NoData,
+                    Message = "Lỗi khi gọi vào DL",
+                };
+            }
+        }
+
+
+
         #endregion
     }
 }

@@ -221,9 +221,53 @@ namespace MISA.QLTS.DL.VoucherDL
             return result;
         }
 
-        public decimal TotalCost()
+        /// <summary>
+        /// Hàm tính tổng nguyên giá tài sản
+        /// Created by: NDCHIEN(25/4/2023)
+        /// </summary>
+        /// <param name="assetIds">danh sách tài sản</param>
+        /// <returns>tổng nguyên giá các tài sản truyền vào</returns>
+        public decimal TotalCost(List<Guid> assetIds)
         {
-            return 0;
+            // khởi tạo câu lệnh sql
+            decimal result = 0;
+            if (assetIds.Count == 0)
+            {
+                return result;
+            }
+            var stringFormat = $"('{string.Join("','", assetIds)}')";
+            var storedProcedureName = "Proc_Asset_TotalCost";
+            var parameters = new DynamicParameters();
+            parameters.Add("p_list", stringFormat);
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                result = mySqlConnection.QueryFirstOrDefault<decimal>(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Hàm update nguyên giá cho chứng từ
+        /// </summary>
+        /// <param name="assetIds">danh sách id tài sản</param>
+        /// <param name="voucherId">id chứng từ</param>
+        /// <returns>số bản ghi ảnh hưởng</returns>
+        public int UpdateCost(List<Guid> assetIds, Guid voucherId)
+        {
+            // chuẩn bị câu lệnh proc
+            var storedProcedureName = "Proc_Voucher_UpdateCost";
+            // chuẩn bị parameter
+            var parameters = new DynamicParameters();
+            parameters.Add("p_voucher_id", voucherId);
+            parameters.Add("p_cost", TotalCost(assetIds));
+            // kết nối mysql
+            int numberOfAffectedRows;
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                mySqlConnection.Open();
+                numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+            }
+            return numberOfAffectedRows;
         }
     }       
 }

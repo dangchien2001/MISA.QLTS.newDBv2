@@ -56,6 +56,20 @@ namespace MISA.QLTS.DL.VoucherDL
         /// <returns></returns>
         string GetMaxCode();
 
-        decimal TotalCost();
+        /// <summary>
+        /// Hàm tính tổng nguyên giá tài sản
+        /// Created by: NDCHIEN(25/4/2023)
+        /// </summary>
+        /// <param name="assetIds">danh sách tài sản</param>
+        /// <returns>tổng nguyên giá các tài sản truyền vào</returns>
+        decimal TotalCost(List<Guid> assetIds);
+
+        /// <summary>
+        /// Hàm update nguyên giá cho chứng từ
+        /// </summary>
+        /// <param name="assetIds">danh sách id tài sản</param>
+        /// <param name="voucherId">id chứng từ</param>
+        /// <returns>số bản ghi ảnh hưởng</returns>
+        int UpdateCost(List<Guid> assetIds, Guid voucherId);
     }
 }

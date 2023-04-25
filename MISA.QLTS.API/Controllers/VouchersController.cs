@@ -55,8 +55,9 @@ namespace MISA.QLTS.API.Controllers
             {
                 var voucherResult = _voucherBL.InsertVoucher(voucherInsert.voucher);
                 var voucherDetailResult = _voucherBL.InserDetail(voucherInsert.assetIds, voucherResult.voucher_id);
-                var updateAssetResult = _voucherBL.UpdateAsset(voucherInsert.assetIds);
-                if (voucherResult.IsSuccess && voucherDetailResult.IsSuccess)
+                var updatedAssetResult = _voucherBL.UpdateAsset(voucherInsert.assetIds);
+                var updatedTotalCost = _voucherBL.UpdateCost(voucherInsert.assetIds, voucherResult.voucher_id);
+                if (voucherResult.IsSuccess && voucherDetailResult.IsSuccess && updatedTotalCost.IsSuccess)
                 {
                     return StatusCode(StatusCodes.Status201Created, 1);
                 }
@@ -80,7 +81,16 @@ namespace MISA.QLTS.API.Controllers
                         DevMsg = voucherDetailResult.Message
                     });
                 }
-                else if (!updateAssetResult.IsSuccess)
+                else if (!updatedAssetResult.IsSuccess)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
+                    {
+                        ErrorCode = voucherDetailResult.ErrorCode,
+                        UserMsg = Resource.SystemError,
+                        DevMsg = voucherDetailResult.Message
+                    });
+                }
+                else if (!updatedTotalCost.IsSuccess)
                 {
                     return StatusCode(StatusCodes.Status400BadRequest, new ErrorResult
                     {
