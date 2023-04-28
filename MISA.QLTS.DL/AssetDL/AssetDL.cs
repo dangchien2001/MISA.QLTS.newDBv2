@@ -229,14 +229,15 @@ namespace MISA.QLTS.DL.AssetDL
         /// <param name="pageNumber"></param>
         /// <returns></returns>
         public PagingAssetNoActive GetAssetsNoActiveByFilter(
-            [FromBody] List<string>? assetCodes,
+            [FromBody] AssetForSelect? assetCodes,
             [FromQuery] string? assetFilter, 
             [FromQuery] int pageSize = 10, 
             [FromQuery] int pageNumber = 1)            
         {
             // Khởi tạo câu lệnh sql
             var result = 0;
-            var stringFormat = $"('{string.Join("','", assetCodes)}')";
+            var stringFormatNoActive = $"('{string.Join("','", assetCodes.asset_no_active)}')";
+            var stringFormatActive = $"('{string.Join("','", assetCodes.asset_active)}')";
 
             // chuẩn bị tên procedure
             string storedProcedureName = "Proc_Asset_NonActive_Search_Paging";
@@ -246,7 +247,8 @@ namespace MISA.QLTS.DL.AssetDL
             parameters.Add("p_page_size", pageSize);
             parameters.Add("p_page_number", pageNumber);
             parameters.Add("p_asset_filter", assetFilter);
-            parameters.Add("p_list", stringFormat);
+            parameters.Add("p_list", stringFormatNoActive);
+            parameters.Add("p_list_active", stringFormatActive);
 
             // gọi db
             var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString);

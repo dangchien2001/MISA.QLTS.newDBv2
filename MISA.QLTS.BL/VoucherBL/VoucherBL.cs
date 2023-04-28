@@ -47,8 +47,20 @@ namespace MISA.QLTS.BL.VoucherBL
 
         protected override ServiceResult ValidateCustom(Voucher? record)
         {
+            List<string> lstDuplicate = new List<string>();
             ServiceResult lstValiDateCustom = new ServiceResult();
-            lstValiDateCustom = null;
+            bool result = DuplicateCode(record);
+            if (result)
+            {
+                lstValiDateCustom.IsSuccess = false;
+                lstValiDateCustom.ErrorCode = Common.Enums.ErrorCode.DuplicateCode;
+                lstDuplicate.Add(Resource.ErrorDuplicate);
+                lstValiDateCustom.Data = lstDuplicate;
+            }
+            else
+            {
+                lstValiDateCustom = null;
+            }
             return lstValiDateCustom;
         }
 
@@ -57,45 +69,46 @@ namespace MISA.QLTS.BL.VoucherBL
         /// </summary>
         /// <param name="record">đối tượng chứng từ</param>
         /// <returns>đối tượng VoucherResult gồm số bản ghi ảnh hưởng và id được tạo sau khi thêm</returns>
-        public ServiceResultForVoucher InsertVoucher(Voucher record)
+        public ServiceResult InsertVoucher(VoucherInsert voucherInsert)
         {
             // Validate
             ServiceResult validateResults = new ServiceResult();
-            validateResults = ValidateData(record);
-            ServiceResultForVoucher validateResultsForVoucher = new ServiceResultForVoucher
+            validateResults = ValidateData(voucherInsert.voucher);
+
+            if (!validateResults.IsSuccess && validateResults.ErrorCode == ErrorCode.IsValidData)
             {
-                IsSuccess = validateResults.IsSuccess,
-                ErrorCode = validateResults.ErrorCode,
-                Data = validateResults.Data,
-                Message = validateResults.Message,
-                voucher_id = record.voucher_id
-            };
-            if (!validateResultsForVoucher.IsSuccess && validateResultsForVoucher.ErrorCode == ErrorCode.IsValidData)
-            {
-                return validateResultsForVoucher;
+                return validateResults;
             }
-            else if (!validateResultsForVoucher.IsSuccess && validateResultsForVoucher.ErrorCode == ErrorCode.DuplicateCode)
+            else if (!validateResults.IsSuccess && validateResults.ErrorCode == ErrorCode.DuplicateCode)
             {
-                return validateResultsForVoucher;
+                return validateResults;
+            }
+            else if (voucherInsert.assetIds.Count < 1)
+            {
+                return new ServiceResult()
+                {
+                    IsSuccess = false,
+                    ErrorCode = Common.Enums.ErrorCode.NoData,
+                    Message = "Phải chọn ít nhất 1 tài sản"
+                };
             }
 
             // Thành công -- gọi vào DL để chạy store
 
-            var VoucherResult = _voucherDL.InsertVoucher(record);
+            var result = _voucherDL.InsertVoucher(voucherInsert);
 
             // Xử lý kết quả trả về
 
-            if (VoucherResult.numberOfAffectRows > 0)
+            if (result > 0)
             {
-                return new ServiceResultForVoucher
+                return new ServiceResult
                 {
                     IsSuccess = true,
-                    voucher_id = VoucherResult.voucher_id
                 };
             }
             else
             {
-                return new ServiceResultForVoucher
+                return new ServiceResult
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
@@ -235,6 +248,130 @@ namespace MISA.QLTS.BL.VoucherBL
             }
         }
 
+        public bool DuplicateCode(Voucher voucher)
+        {
+            Guid defaultGuid = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            List<Voucher> result = new List<Voucher>();
+            result = _voucherDL.DuplicateCode(voucher);
+            bool isCheck = false;
+            if(voucher.voucher_id != defaultGuid)
+            {
+                foreach (Voucher voucher_result in result)
+                {
+                    if (voucher_result.voucher_code == voucher.voucher_code && voucher_result.voucher_id != voucher.voucher_id)
+                    {
+                        isCheck = true;
+                    }
+                    else
+                    {
+                        isCheck = false;
+                    }
+                }
+                return isCheck;
+            }
+            else
+            {
+                foreach (Voucher voucher_result in result)
+                {
+                    if (voucher_result.voucher_code == voucher.voucher_code)
+                    {
+                        isCheck = true;
+                    }
+                    else
+                    {
+                        isCheck = false;
+                    }
+                }
+                return isCheck;
+            }
+        }
+
+        /// <summary>
+        /// Lấy voucher theo code
+        /// </summary>
+        /// <param name="voucherCode">mã chứng từ</param>
+        /// <returns>Đối tượng chứng từ</returns>
+        public VoucherGetByCode GetVoucherByCode(string voucherCode)
+        {
+            VoucherGetByCode result;
+            result = _voucherDL.GetVoucherByCode(voucherCode);
+            return result;
+        }
+
+        /// <summary>
+        /// lấy danh sách tài sản (chi tiết chứng từ) dựa trên mã chứng từ
+        /// </summary>
+        /// <param name="voucherId">mã chứng từ</param>
+        /// <returns>danh sách tài sản (chi tiết chứng từ)</returns>
+        public List<VoucherDetail> GetVoucherDetailByVoucherCode(string voucherCode)
+        {
+            dynamic result;
+            result = _voucherDL.GetVoucherDetailByVoucherCode(voucherCode);
+            return result;
+        }
+
+        /// <summary>
+        /// Cập nhật chứng từ
+        /// Created by: NDCHIEN(27/4/2023)
+        /// </summary>
+        /// <param name="voucher">đối tượng chứng từ</param>
+        /// <param name="assetCodeActive">mảng chứa mã tài sản dùng để active</param>
+        /// <param name="assetCodeNoActive">mảng chứa mã tài sản dùng để hủy active</param>
+        /// <returns></returns>
+        public ServiceResult UpdateVoucher(VoucherUpdate voucherUpdate, Guid voucherId)
+        {
+            // validate
+            ServiceResult validateResults = new ServiceResult();
+            validateResults = ValidateData(voucherUpdate.voucher);
+
+            if (!validateResults.IsSuccess && validateResults.ErrorCode == ErrorCode.IsValidData)
+            {
+                return validateResults;
+            }
+            else if (!validateResults.IsSuccess && validateResults.ErrorCode == ErrorCode.DuplicateCode)
+            {
+                return validateResults;
+            }
+            else if (voucherUpdate.asset_code_active.Count < 1 || voucherUpdate.asset_ids.Count < 1)
+            {
+                return new ServiceResult()
+                {
+                    IsSuccess = false,
+                    ErrorCode = Common.Enums.ErrorCode.NoData,
+                    Message = "Phải chọn ít nhất 1 tài sản"
+                };
+            }
+            var numberOfAffectedResult = _voucherDL.UpdateVoucher(voucherUpdate, voucherId);
+            if (numberOfAffectedResult > 0)
+            {
+                return new ServiceResult
+                {
+                    IsSuccess = true,
+                };
+            }
+            else
+            {
+                //Kết quả trả về
+                return new ServiceResult
+                {
+                    IsSuccess = false,
+                    ErrorCode = Common.Enums.ErrorCode.NoData,
+                    Message = "Lỗi khi gọi vào DL",
+                };
+            }
+        }
+
+        /// <summary>
+        /// Xóa chứng từ
+        /// </summary>
+        /// <param name="voucher_ids">list id chứng từ</param>
+        /// <returns>số bản ghi ảnh hưởng</returns>
+        public int DeleteVoucher(List<string> voucher_codes)
+        {
+            int result;
+            result = _voucherDL.DeleteVoucher(voucher_codes);
+            return result;
+        }
 
 
         #endregion

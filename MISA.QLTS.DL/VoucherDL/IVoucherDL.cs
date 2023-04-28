@@ -21,7 +21,7 @@ namespace MISA.QLTS.DL.VoucherDL
         /// </summary>
         /// <param name="record">đối tượng chứng từ</param>
         /// <returns>đối tượng VoucherResult gồm số bản ghi ảnh hưởng và id được tạo sau khi thêm</returns>
-        VoucherResult InsertVoucher(Voucher record);
+        int InsertVoucher(VoucherInsert voucherInsert);
 
         /// <summary>
         /// Lấy chứng từ phân trang và tìm kiếm
@@ -71,5 +71,45 @@ namespace MISA.QLTS.DL.VoucherDL
         /// <param name="voucherId">id chứng từ</param>
         /// <returns>số bản ghi ảnh hưởng</returns>
         int UpdateCost(List<Guid> assetIds, Guid voucherId);
+
+        /// <summary>
+        /// Lấy chứng từ trong db theo code phục vụ check trùng
+        /// Created by: NDCHIEN(26/4/2023)
+        /// </summary>
+        /// <param name="voucher">đối tượng voucher</param>
+        /// <returns>danh sách voucher có mã cần tìm</returns>
+        List<Voucher> DuplicateCode(Voucher voucher);
+
+        /// <summary>
+        /// Lấy voucher theo voucher_code
+        /// Created by: NDCHIEN(26/4/2023)
+        /// </summary>
+        /// <param name="voucherCode">code chứng từ</param>
+        /// <returns>Đối tượng chứng từ</returns>
+        VoucherGetByCode GetVoucherByCode(String voucherCode);
+
+        /// <summary>
+        /// lấy danh sách tài sản (chi tiết chứng từ) dựa trên mã chứng từ
+        /// </summary>
+        /// <param name="voucherId">mã chứng từ</param>
+        /// <returns>danh sách tài sản (chi tiết chứng từ)</returns>
+        List<VoucherDetail> GetVoucherDetailByVoucherCode(string voucherCode);
+
+        /// <summary>
+        /// Cập nhật chứng từ
+        /// Created by: NDCHIEN(27/4/2023)
+        /// </summary>
+        /// <param name="voucher">đối tượng chứng từ</param>
+        /// <param name="assetCodeActive">mảng chứa mã tài sản dùng để active</param>
+        /// <param name="assetCodeNoActive">mảng chứa mã tài sản dùng để hủy active</param>
+        /// <returns></returns>
+        int UpdateVoucher(VoucherUpdate voucherUpdate, Guid voucherId);
+
+        /// <summary>
+        /// Xóa chứng từ
+        /// </summary>
+        /// <param name="voucher_ids">list id chứng từ</param>
+        /// <returns>số bản ghi ảnh hưởng</returns>
+        int DeleteVoucher(List<string> voucher_codes);
     }
 }

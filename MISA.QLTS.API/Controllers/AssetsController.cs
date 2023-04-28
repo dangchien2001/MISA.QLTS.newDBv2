@@ -169,7 +169,7 @@ namespace MISA.QLTS.API.Controllers
 
         [HttpPost("NoActive")]
         public IActionResult GetAssetsNoActiveByFilter(
-            [FromBody] List<string>? assetCodes,
+            [FromBody] AssetForSelect? assetCodes,
             [FromQuery] string? assetFilter, 
             [FromQuery] int pageSize = 10, 
             [FromQuery] int pageNumber = 1)
