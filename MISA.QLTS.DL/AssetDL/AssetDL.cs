@@ -5,6 +5,7 @@ using MISA.QLTS.Common.Entities;
 using MISA.QLTS.Common.Entities.DTO;
 using MISA.QLTS.DL.BaseDL;
 using MISA.QLTS.DL.Datacontext;
+using MISA.QLTS.DL.VoucherDL;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace MISA.QLTS.DL.AssetDL
 {
 
     public class AssetDL : BaseDL<Asset>, IAssetDL
     {
+        
         /// <summary>
         /// Hàm xóa nhiều bản ghi
         /// </summary>
@@ -270,6 +273,103 @@ namespace MISA.QLTS.DL.AssetDL
                 TotalRecord = totalAllRecords,
                 Data = AssetFilters
             };
+        }
+
+        /// <summary>
+        /// Update giá json
+        /// Created by: NDCHIEN(5/5/2023)
+        /// </summary>
+        /// <returns></returns>
+        public ResultUpdateAssetCost UpdateCostAsset(ForUpdateCost forUpdateCost, String assetCode)
+        {
+            // chuẩn bị tên procedure
+            string storedProcedureName = "Proc_Asset_UpdateJSON";
+            // chuẩn bị tham số đầu vào
+            var parameters = new DynamicParameters();
+            parameters.Add("p_json", forUpdateCost.json);
+            parameters.Add("p_total_cost", forUpdateCost.total_cost);
+            parameters.Add("p_asset_code", assetCode);
+
+            // chuẩn bị tên procedure
+            string storedProcedureName2 = "Proc_Voucher_UpdateCost";
+            // chuẩn bị tham số đầu vào
+            var parameters2 = new DynamicParameters();
+            parameters2.Add("p_voucher_id", forUpdateCost.voucher_id);
+            parameters2.Add("p_cost", forUpdateCost.voucher_cost);
+
+            // chuẩn bị tên procedure
+            string storedProcedureName3 = "Proc_Asset_GetByAssetCode";
+            // chuẩn bị tham số đầu vào
+            var parameters3 = new DynamicParameters();
+            parameters3.Add("p_asset_code", assetCode);
+
+            int numberOfAffectedRows;
+            int numberOfAffectedRows2;
+            dynamic asset;
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                mySqlConnection.Open();
+                using (var transaction = mySqlConnection.BeginTransaction())
+                {
+                    numberOfAffectedRows = mySqlConnection.Execute(storedProcedureName, parameters, transaction: transaction, commandType: CommandType.StoredProcedure);
+                    if (forUpdateCost.voucher_id == new Guid("00000000-0000-0000-0000-000000000000"))
+                    {
+                        numberOfAffectedRows2 = 1;
+                    }
+                    else
+                    {
+                        numberOfAffectedRows2 = mySqlConnection.Execute(storedProcedureName2, parameters2, transaction: transaction, commandType: CommandType.StoredProcedure);
+                    }
+
+                    asset = mySqlConnection.QueryFirstOrDefault<AssetExport>(storedProcedureName3, parameters3, transaction: transaction, commandType: CommandType.StoredProcedure);
+
+                    if (numberOfAffectedRows == 1 &&
+                        numberOfAffectedRows2 == 1)
+                    {
+                        transaction.Commit();
+
+                        return new ResultUpdateAssetCost
+                        {
+                            result = 1,
+                            asset = asset
+                        };
+                    }
+                    else
+                    {
+                        transaction.Rollback();
+
+                        return new ResultUpdateAssetCost
+                        {
+                            result = 0,
+                            asset = null
+                        };
+                    }
+                }
+            }
+        }
+
+        
+
+        /// <summary>
+        /// Lấy dữ liệu nguồn hình thành giá 
+        /// </summary>
+        /// <param name="assetCode">Mã tài sản</param>
+        /// <returns>Tên tài sản, tên phòng ban, thông tin nguồn hình thành giá</returns>
+        public List<Budget> SelectBudget(string assetCode)
+        {
+            // chuẩn bị tên procedure
+            string storedProcedureName = "Proc_Asset_GetBudget";
+            // chuẩn bị tham số đầu vào
+            var parameters = new DynamicParameters();
+            parameters.Add("p_asset_code", assetCode);
+
+            dynamic record;
+            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            {
+                var result = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
+                record = result.Read<Budget>().ToList();
+            }
+            return record;
         }
     }
 }

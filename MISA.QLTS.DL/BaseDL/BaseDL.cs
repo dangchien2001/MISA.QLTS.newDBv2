@@ -14,6 +14,8 @@ namespace MISA.QLTS.DL.BaseDL
 {
     public class BaseDL<T> : IBaseDL<T>
     {
+
+
         /// <summary>
         /// Xóa 1 bản ghi
         /// </summary>

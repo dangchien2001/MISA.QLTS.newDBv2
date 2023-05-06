@@ -77,5 +77,14 @@ namespace MISA.QLTS.BL.AssetBL
             [FromQuery] string? assetFilter,
             [FromQuery] int pageSize = 10,
             [FromQuery] int pageNumber = 1);
+
+        /// <summary>
+        /// Update giá json
+        /// Created by: NDCHIEN(5/5/2023)
+        /// </summary>
+        /// <returns></returns>
+        ServiceResult UpdateCostAsset(ForUpdateCost forUpdateCost, String assetCode);
+
+        List<Budget> SelectBudget(string assetCode);
     }
 }

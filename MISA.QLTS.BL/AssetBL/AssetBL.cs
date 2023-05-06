@@ -349,5 +349,39 @@ namespace MISA.QLTS.BL.AssetBL
             var result = _assetDL.GetAssetsNoActiveByFilter(assetCodes, assetFilter, pageSize, pageNumber);
             return result;
         }
+
+        public List<Budget> SelectBudget(string assetCode)
+        {
+            var result = _assetDL.SelectBudget(assetCode);
+            return result;
+        }
+
+        /// <summary>
+        /// Update giá json
+        /// Created by: NDCHIEN(5/5/2023)
+        /// </summary>
+        /// <returns></returns>
+        public ServiceResult UpdateCostAsset(ForUpdateCost forUpdateCost, String assetCode)
+        {
+            var numberOfAffectedResult = _assetDL.UpdateCostAsset(forUpdateCost, assetCode);
+            if (numberOfAffectedResult.result > 0)
+            {
+                return new ServiceResult
+                {
+                    IsSuccess = true,
+                    Data = numberOfAffectedResult.asset
+                };
+            }
+            else
+            {
+                //Kết quả trả về
+                return new ServiceResult
+                {
+                    IsSuccess = false,
+                    ErrorCode = Common.Enums.ErrorCode.NoData,
+                    Message = "Lỗi khi gọi vào DL",
+                };
+            }
+        }
     }
 }

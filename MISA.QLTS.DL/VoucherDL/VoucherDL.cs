@@ -115,7 +115,6 @@ namespace MISA.QLTS.DL.VoucherDL
                         return 0;
                     }
                 }
-                mySqlConnection.Close();
             }
             return 0;
         } 
@@ -215,7 +214,6 @@ namespace MISA.QLTS.DL.VoucherDL
                 }
             }
 
-            return numberOfAffectedRows;
         }
 
         /// <summary>
@@ -284,7 +282,7 @@ namespace MISA.QLTS.DL.VoucherDL
         /// </summary>
         /// <param name="assetIds">danh sách tài sản</param>
         /// <returns>tổng nguyên giá các tài sản truyền vào</returns>
-        public decimal TotalCost(List<Guid> assetIds)
+        public static decimal TotalCost(List<Guid> assetIds)
         {
             // khởi tạo câu lệnh sql
             decimal result = 0;

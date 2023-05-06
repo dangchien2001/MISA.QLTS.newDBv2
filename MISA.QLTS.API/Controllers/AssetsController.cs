@@ -187,7 +187,35 @@ namespace MISA.QLTS.API.Controllers
             }
         }
 
+        [HttpPut("CostAsset/{assetCode}")]
+        public IActionResult UpdateCostAsset(ForUpdateCost forUpdateCost, string assetCode)
+        {
+            try
+            {
+                var result = _assetBL.UpdateCostAsset(forUpdateCost, assetCode);
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return ErrorException(ex);
+            }
+        }
 
+        [HttpGet("Budget")]
+        public IActionResult SelectBudget(string assetCode)
+        {
+            try
+            {
+                var result = _assetBL.SelectBudget(assetCode);
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return ErrorException(ex);
+            }
+        }
         #endregion
     }
 }

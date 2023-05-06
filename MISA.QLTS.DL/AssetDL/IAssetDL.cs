@@ -81,6 +81,18 @@ namespace MISA.QLTS.DL.AssetDL
         /// <returns></returns>
         List<AssetExport> ExportToExcel();
 
+        /// <summary>
+        /// Update giá json
+        /// Created by: NDCHIEN(5/5/2023)
+        /// </summary>
+        /// <returns></returns>
+        ResultUpdateAssetCost UpdateCostAsset(ForUpdateCost forUpdateCost, String assetCode);
 
+        /// <summary>
+        /// Lấy dữ liệu nguồn hình thành giá 
+        /// </summary>
+        /// <param name="assetCode">Mã tài sản</param>
+        /// <returns>Tên tài sản, tên phòng ban, thông tin nguồn hình thành giá</returns>
+        List<Budget> SelectBudget(string assetCode);
     }
 }
