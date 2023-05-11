@@ -51,7 +51,7 @@ namespace MISA.QLTS.Common.Entities.DTO
         /// <summary>
         /// Danh sách dữ liệu
         /// </summary>
-        public List<AssetExport> Data { get; set; }
+        public List<AssetPaging> Data { get; set; }
 
 
     }

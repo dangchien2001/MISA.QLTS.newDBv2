@@ -25,6 +25,7 @@ namespace MISA.QLTS.Common.Entities
         /// mã chứng từ
         /// </summary>
         [Required(ErrorMessage = "Mã chứng từ không được bỏ trống")]
+        [StringLength(10, MinimumLength = 7)]
         public string voucher_code { get; set; }
 
         /// <summary>

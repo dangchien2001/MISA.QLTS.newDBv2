@@ -25,6 +25,7 @@ namespace MISA.QLTS.Common.Entities
         /// Mã tài sản
         /// </summary>
         [Required(ErrorMessage = "Mã tài sản không được bỏ trống")]
+        [StringLength(10, MinimumLength = 7)]
         public string asset_code { get; set; }
 
         /// <summary>

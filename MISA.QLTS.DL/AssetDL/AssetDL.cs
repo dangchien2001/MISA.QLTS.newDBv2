@@ -110,7 +110,7 @@ namespace MISA.QLTS.DL.AssetDL
             var getAssetFilter = mySqlConnection.QueryMultiple(storedProcedureName, parameters, commandType: CommandType.StoredProcedure);
 
             int totalAllRecords = getAssetFilter.Read<int>().Single();
-            var AssetFilters = getAssetFilter.Read<AssetExport>().ToList();
+            var AssetFilters = getAssetFilter.Read<AssetPaging>().ToList();
             int totalRecords = getAssetFilter.Read<int>().Single();
             int totalQuantity = getAssetFilter.Read<int>().Single();
             decimal totalCost = getAssetFilter.Read<decimal>().Single();

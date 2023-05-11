@@ -37,7 +37,7 @@ namespace MISA.QLTS.BL.AssetBL
         /// </summary>
         /// <param name="assetIds"></param>
         /// <returns></returns>
-        public int DeleteAssetMore(List<Guid> assetIds);
+        public DeleteResult DeleteAssetMore(List<Guid> assetIds);
 
         /// <summary>
         /// Kiểm tra trùng mã tài sản

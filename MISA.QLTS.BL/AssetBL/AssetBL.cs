@@ -40,10 +40,34 @@ namespace MISA.QLTS.BL.AssetBL
         /// </summary>
         /// <param name="assetIds"></param>
         /// <returns></returns>
-        public int DeleteAssetMore(List<Guid> assetIds)
+        public DeleteResult DeleteAssetMore(List<Guid> assetIds)
         {
-            var result = _assetDL.DeleteAssetMore(assetIds);
-            return result;
+            // biến lưu số tài sản có phát sinh chứng từ
+            int activeAsset = 0;
+            foreach(var assetId in assetIds)
+            {
+                var asset = _assetDL.GetRecordById(assetId);
+                if (asset[0].active == 1)
+                {
+                    activeAsset++;
+                }
+            }
+
+            if(activeAsset == 0)
+            {
+                var result = _assetDL.DeleteAssetMore(assetIds);
+                return new DeleteResult()
+                {
+                    result = true,
+                    rowAffected = result,
+                };
+            }
+
+            return new DeleteResult()
+            {
+                result = false,
+                rowAffected = activeAsset
+            };
         }
 
         /// <summary>

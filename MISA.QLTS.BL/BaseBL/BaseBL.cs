@@ -136,10 +136,21 @@ namespace MISA.QLTS.BL.BaseBL
                 var propertyValue = property.GetValue(record);
 
                 var requiredAttribute = (RequiredAttribute)property.GetCustomAttributes(typeof(RequiredAttribute), false).FirstOrDefault();
+                var stringLengthAttribute = (StringLengthAttribute)property.GetCustomAttributes(typeof(StringLengthAttribute), false).FirstOrDefault();
                 if (requiredAttribute != null && string.IsNullOrEmpty(propertyValue.ToString()))
                 {
                     lstEmpty.Add(requiredAttribute.ErrorMessage);
-                }               
+                }
+                if (stringLengthAttribute != null)
+                {
+                    int max = Int32.Parse(stringLengthAttribute.GetType().GetProperty("MaximumLength").GetValue(stringLengthAttribute, null).ToString());
+                    int min = Int32.Parse(stringLengthAttribute.GetType().GetProperty("MinimumLength").GetValue(stringLengthAttribute, null).ToString());
+
+                    if (propertyValue.ToString().Length > max || propertyValue.ToString().Length < min)
+                    {
+                        lstEmpty.Add($"{propertyName} phải có số kí tự từ {min} đến {max}!");
+                    }
+                }
             }
             var result = ValidateCustom(record);
             if (result != null)

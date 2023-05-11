@@ -88,10 +88,14 @@ namespace MISA.QLTS.API.Controllers
         {
             try
             {
-                int numberOfAffectedRows = _assetBL.DeleteAssetMore(assetIds);
-                if (numberOfAffectedRows > 0)
+                DeleteResult numberOfAffectedRows = _assetBL.DeleteAssetMore(assetIds);
+                if (numberOfAffectedRows.rowAffected > 0 && numberOfAffectedRows.result == true)
                 {
                     return StatusCode(StatusCodes.Status200OK, 1);
+                }
+                if (numberOfAffectedRows.rowAffected > 0 && numberOfAffectedRows.result == false)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, $"{numberOfAffectedRows.rowAffected} tài sản được chọn không thể xóa. Vui lòng kiểm tra lại tài sản trước khi thực hiện xóa.");
                 }
                 else
                 {
