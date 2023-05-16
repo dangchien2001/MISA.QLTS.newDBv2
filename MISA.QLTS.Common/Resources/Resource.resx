@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="callDbError" xml:space="preserve">
+    <value>Lỗi khi gọi vào DL</value>
+  </data>
   <data name="ConditionalDate" xml:space="preserve">
     <value>Ngày mua phải nhỏ hơn ngày sử dụng</value>
     <comment>Lỗi điều kiện ngày</comment>
@@ -153,6 +156,10 @@
     <value>Tỷ lệ hao mòn không được bỏ trống</value>
     <comment>Lỗi bỏ trống tỷ lệ hao mòn</comment>
   </data>
+  <data name="emptyError" xml:space="preserve">
+    <value>{0} không được bỏ trống</value>
+    <comment>Lỗi bỏ trống</comment>
+  </data>
   <data name="EmptyLifeTime" xml:space="preserve">
     <value>Số năm sử dụng không được bỏ trống</value>
     <comment>Lỗi bỏ trống số năm sử dụng</comment>
@@ -177,6 +184,10 @@
     <value>Mã tài sản đã tồn tại</value>
     <comment>Trùng mã tài sản</comment>
   </data>
+  <data name="errorLength" xml:space="preserve">
+    <value>{0} phải có số kí tự từ {1} đến {2}!</value>
+    <comment>Lỗi độ dài chuỗi</comment>
+  </data>
   <data name="ErrorToDL" xml:space="preserve">
     <value>Lỗi khi gọi vào DL</value>
     <comment>Lỗi khi gọi vào DL</comment>
@@ -185,8 +196,23 @@
     <value>Ngày không được vượt quá ngày hiện tại</value>
     <comment>Lỗi ngày vượt quá ngày hiện tại</comment>
   </data>
+  <data name="increment_date" xml:space="preserve">
+    <value>Ngày ghi tăng</value>
+  </data>
+  <data name="needAssetError" xml:space="preserve">
+    <value>Phải chọn ít nhất 1 tài sản</value>
+  </data>
   <data name="SystemError" xml:space="preserve">
     <value>Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp</value>
     <comment>Trả về lỗi exeption</comment>
+  </data>
+  <data name="updateAssetFall" xml:space="preserve">
+    <value>Tài sản update thất bại</value>
+  </data>
+  <data name="voucher_code" xml:space="preserve">
+    <value>Mã chứng từ</value>
+  </data>
+  <data name="voucher_date" xml:space="preserve">
+    <value>Ngày chứng từ</value>
   </data>
 </root>

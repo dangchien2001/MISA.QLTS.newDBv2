@@ -24,20 +24,18 @@ namespace MISA.QLTS.Common.Entities
         /// <summary>
         /// mã chứng từ
         /// </summary>
-        [Required(ErrorMessage = "Mã chứng từ không được bỏ trống")]
-        [StringLength(10, MinimumLength = 7)]
+        [StringLength(20, MinimumLength = 7)]
+        [Required]
         public string voucher_code { get; set; }
 
         /// <summary>
         /// ngày chứng từ
         /// </summary>
-        [Required(ErrorMessage = "Ngày chứng từ không được bỏ trống")]
         public DateTime voucher_date { get; set; }
 
         /// <summary>
         /// ngày ghi tăng
         /// </summary>
-        [Required(ErrorMessage = "Ngày ghi tăng không được bỏ trống")]
         public DateTime increment_date { get; set; }
 
         /// <summary>

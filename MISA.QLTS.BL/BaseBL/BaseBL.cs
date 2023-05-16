@@ -109,7 +109,7 @@ namespace MISA.QLTS.BL.BaseBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Lỗi thêm mới khi gọi vào DL",
+                    Message = Resource.callDbError,
                 };
             }
         }
@@ -139,7 +139,7 @@ namespace MISA.QLTS.BL.BaseBL
                 var stringLengthAttribute = (StringLengthAttribute)property.GetCustomAttributes(typeof(StringLengthAttribute), false).FirstOrDefault();
                 if (requiredAttribute != null && string.IsNullOrEmpty(propertyValue.ToString()))
                 {
-                    lstEmpty.Add(requiredAttribute.ErrorMessage);
+                    lstEmpty.Add(String.Format(Resource.emptyError, Resource.ResourceManager.GetString(propertyName)));
                 }
                 if (stringLengthAttribute != null)
                 {
@@ -148,7 +148,7 @@ namespace MISA.QLTS.BL.BaseBL
 
                     if (propertyValue.ToString().Length > max || propertyValue.ToString().Length < min)
                     {
-                        lstEmpty.Add($"{propertyName} phải có số kí tự từ {min} đến {max}!");
+                        lstEmpty.Add(String.Format(Resource.errorLength, Resource.ResourceManager.GetString(propertyName), min, max));
                     }
                 }
             }
@@ -251,7 +251,7 @@ namespace MISA.QLTS.BL.BaseBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Lỗi khi gọi vào DL",
+                    Message = Resource.callDbError,
                 };
             }
         } 

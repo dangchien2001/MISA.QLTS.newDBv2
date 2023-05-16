@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MISA.QLTS.Common.Constrants;
 using MISA.QLTS.Common.Entities;
 using MISA.QLTS.Common.Entities.DTO;
+using MISA.QLTS.Common.Function;
 using MISA.QLTS.DL.AssetDL;
 using MISA.QLTS.DL.BaseDL;
 using MISA.QLTS.DL.Datacontext;
@@ -53,19 +54,9 @@ namespace MISA.QLTS.DL.VoucherDL
             }
 
             // nối chuỗi để insert nhiều id tài sản vào bảng chi tiết chứng từ
-            string insertVoucherDetail = "INSERT INTO voucher_detail (voucher_detail_id, asset_id, voucher_id) VALUES ";
-            foreach (var id in voucherInsert.assetIds)
-            {
-                var voucherDetailId = Guid.NewGuid();
-                if (id == voucherInsert.assetIds[voucherInsert.assetIds.Count - 1])
-                {
-                    insertVoucherDetail = insertVoucherDetail + $"('{voucherDetailId}', '{id}', '{newRecordID}');";
-                }
-                else
-                {
-                    insertVoucherDetail = insertVoucherDetail + $"('{voucherDetailId}', '{id}', '{newRecordID}'),";
-                }
-            }
+          
+
+            String insertVoucherDetail = Common.Function.Function.insertVoucherDetail(voucherInsert.assetIds, newRecordID);
 
             // nối chuỗi để update tài sản sau khi thêm ch tiết chứng từ
             var stringFormat = $"('{string.Join("','", voucherInsert.assetIds)}')";
@@ -116,7 +107,6 @@ namespace MISA.QLTS.DL.VoucherDL
                     }
                 }
             }
-            return 0;
         } 
 
         /// <summary>
@@ -179,19 +169,9 @@ namespace MISA.QLTS.DL.VoucherDL
             }
 
             // Chuẩn bị câu lệnh insert
-            string insertVoucherDetail = "INSERT INTO voucher_detail (voucher_detail_id, asset_id, voucher_id) VALUES ";
-            foreach (var id in assetIds)
-            {
-                var voucherDetailId = Guid.NewGuid();
-                if (id == assetIds[assetIds.Count - 1])
-                {
-                    insertVoucherDetail = insertVoucherDetail + $"('{voucherDetailId}', '{id}', '{voucherId}');";
-                }
-                else
-                {
-                    insertVoucherDetail = insertVoucherDetail + $"('{voucherDetailId}', '{id}', '{voucherId}'),";
-                }
-            }
+            
+            String insertVoucherDetail = Common.Function.Function.insertVoucherDetail(assetIds, voucherId);
+
             // Kết nối tới CSDL
             using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
             {
@@ -254,26 +234,43 @@ namespace MISA.QLTS.DL.VoucherDL
                         return 0;
                     }
                 }
-                mySqlConnection.Close();
             }
-            return result;
         }
 
         /// <summary>
         /// Lấy mã lớn nhất của voucher
         /// </summary>
         /// <returns></returns>
-        public string GetMaxCode()
+        public string GetMaxCode(int textLength, String text)
         {
-            var result = "";
-            // Chuẩn bị tên stored procedure
-            string storedProcedureName = "Proc_Voucher_GetFirst";
-            // Khởi tạo kết nối tới Database
-            using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+            if(textLength == 0 && text == "")
             {
-                result = mySqlConnection.QueryFirstOrDefault<string>(storedProcedureName, commandType: CommandType.StoredProcedure);
+                var result = "";
+                // Chuẩn bị tên stored procedure
+                string storedProcedureName = "Proc_Voucher_GetFirst";
+                // Khởi tạo kết nối tới Database
+                using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+                {
+                    result = mySqlConnection.QueryFirstOrDefault<string>(storedProcedureName, commandType: CommandType.StoredProcedure);
+                }
+                return result;
             }
-            return result;
+            else
+            {
+                var result = "";          
+                text = text + "%";
+                var dynamicParams = new DynamicParameters();
+                dynamicParams.Add("@txt", text);
+                dynamicParams.Add("@length", textLength + 1);
+                // Khởi tạo kết nối tới Database
+                using (var mySqlConnection = new MySqlConnection(Datacontext.DataBaseContext.connectionString))
+                {
+                    var selectMaxCode = $"SELECT SUBSTR(voucher_code, @length) FROM voucher WHERE voucher_code LIKE @txt ORDER BY CAST(SUBSTR(voucher_code, @length) AS SIGNED) DESC LIMIT 1;";
+                    result = mySqlConnection.QueryFirstOrDefault<string>(sql: selectMaxCode, param: dynamicParams);
+                }
+                return result;
+            }
+            
         }
 
         /// <summary>
@@ -460,19 +457,9 @@ namespace MISA.QLTS.DL.VoucherDL
             // thêm danh sách tài sản mới
             // Chuẩn bị câu lệnh insert
             var resultInsertedAsset = 0;
-            string insertVoucherDetail = "INSERT INTO voucher_detail (voucher_detail_id, asset_id, voucher_id) VALUES ";
-            foreach (var id in voucherUpdate.asset_ids)
-            {
-                var voucherDetailId = Guid.NewGuid();
-                if (id == voucherUpdate.asset_ids[voucherUpdate.asset_ids.Count - 1])
-                {
-                    insertVoucherDetail = insertVoucherDetail + $"('{voucherDetailId}', '{id}', '{voucherId}');";
-                }
-                else
-                {
-                    insertVoucherDetail = insertVoucherDetail + $"('{voucherDetailId}', '{id}', '{voucherId}'),";
-                }
-            }
+            
+
+            String insertVoucherDetail = Common.Function.Function.insertVoucherDetail(voucherUpdate.asset_ids, voucherId);
 
             // Update giá cho chứng từ
             var numberOfAffectedRowsAfterUpdateVoucherCost = 0;

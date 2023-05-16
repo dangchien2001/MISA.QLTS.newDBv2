@@ -89,7 +89,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Phải chọn ít nhất 1 tài sản"
+                    Message = Resource.needAssetError
                 };
             }
 
@@ -112,7 +112,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Lỗi thêm mới khi gọi vào DL",
+                    Message = Resource.ErrorToDL,
                 };
             }
         }
@@ -140,7 +140,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Phải thêm ít nhất 1 tài sản",
+                    Message = Resource.needAssetError,
                 };
             }
             else
@@ -149,7 +149,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Lỗi thêm mới khi gọi vào DL",
+                    Message = Resource.ErrorToDL,
                 };
             }
         }
@@ -175,7 +175,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Tài sản update thất bại",
+                    Message = Resource.updateAssetFall,
                 };
             }
             else
@@ -184,7 +184,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Lỗi thêm mới khi gọi vào DL",
+                    Message = Resource.ErrorToDL,
                 };
             }
         }
@@ -195,23 +195,32 @@ namespace MISA.QLTS.BL.VoucherBL
         /// <returns></returns>
         public string GetMaxCode()
         {
-            // gỡ chữ và số riêng
+            // gỡ chữ 
             var text = "";
-            var number = "";
-            var result = _voucherDL.GetMaxCode();
+            // mã gần nhất
+            var result = _voucherDL.GetMaxCode(text.Length, text);
+
+            if(result == null)
+            {
+                return "GT000001";
+            }
+
             var regex = new Regex(@"(\D)");
+            // vòng lặp tách chữ và số
             for(int i = result.Length - 1; i > 0; i--)
             {
                 if (regex.IsMatch(result[i].ToString()))
                 {
                     text = result.Substring(0, i + 1);
                     break;
-                }
-                number = result[i].ToString() + number;
+                }                
             }
 
+            // lấy số lớn nhất dựa trên chữ ở đầu mã
+            var result2 = _voucherDL.GetMaxCode(text.Length, text);
+
             // logic lấy mã lớn nhất bằng cách cộng 1 với số vừa tách và cho vào chuỗi có số 0 ở đầu
-            int newNumber = Int32.Parse(number) + 1;
+            int newNumber = Int32.Parse(result2) + 1;
             string stringZero = "";
             for(int i = 0;i<(result.Length - text.Length);i++)
             {
@@ -243,7 +252,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Lỗi khi gọi vào DL",
+                    Message = Resource.ErrorToDL,
                 };
             }
         }
@@ -338,7 +347,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Phải chọn ít nhất 1 tài sản"
+                    Message = Resource.needAssetError
                 };
             }
             var numberOfAffectedResult = _voucherDL.UpdateVoucher(voucherUpdate, voucherId);
@@ -356,7 +365,7 @@ namespace MISA.QLTS.BL.VoucherBL
                 {
                     IsSuccess = false,
                     ErrorCode = Common.Enums.ErrorCode.NoData,
-                    Message = "Lỗi khi gọi vào DL",
+                    Message = Resource.ErrorToDL,
                 };
             }
         }

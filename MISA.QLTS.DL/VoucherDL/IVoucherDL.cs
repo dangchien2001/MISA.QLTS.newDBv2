@@ -54,7 +54,7 @@ namespace MISA.QLTS.DL.VoucherDL
         /// Lấy mã lớn nhất của voucher
         /// </summary>
         /// <returns></returns>
-        string GetMaxCode();
+        string GetMaxCode(int textLength, String text);
 
         
 

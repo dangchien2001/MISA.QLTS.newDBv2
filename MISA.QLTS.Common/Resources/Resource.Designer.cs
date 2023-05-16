@@ -61,6 +61,15 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lỗi khi gọi vào DL.
+        /// </summary>
+        public static string callDbError {
+            get {
+                return ResourceManager.GetString("callDbError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ngày mua phải nhỏ hơn ngày sử dụng.
         /// </summary>
         public static string ConditionalDate {
@@ -142,6 +151,15 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} không được bỏ trống.
+        /// </summary>
+        public static string emptyError {
+            get {
+                return ResourceManager.GetString("emptyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Số năm sử dụng không được bỏ trống.
         /// </summary>
         public static string EmptyLifeTime {
@@ -196,6 +214,15 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} phải có số kí tự từ {1} đến {2}!.
+        /// </summary>
+        public static string errorLength {
+            get {
+                return ResourceManager.GetString("errorLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lỗi khi gọi vào DL.
         /// </summary>
         public static string ErrorToDL {
@@ -214,11 +241,56 @@ namespace MISA.QLTS.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngày ghi tăng.
+        /// </summary>
+        public static string increment_date {
+            get {
+                return ResourceManager.GetString("increment_date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phải chọn ít nhất 1 tài sản.
+        /// </summary>
+        public static string needAssetError {
+            get {
+                return ResourceManager.GetString("needAssetError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp.
         /// </summary>
         public static string SystemError {
             get {
                 return ResourceManager.GetString("SystemError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tài sản update thất bại.
+        /// </summary>
+        public static string updateAssetFall {
+            get {
+                return ResourceManager.GetString("updateAssetFall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã chứng từ.
+        /// </summary>
+        public static string voucher_code {
+            get {
+                return ResourceManager.GetString("voucher_code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày chứng từ.
+        /// </summary>
+        public static string voucher_date {
+            get {
+                return ResourceManager.GetString("voucher_date", resourceCulture);
             }
         }
     }

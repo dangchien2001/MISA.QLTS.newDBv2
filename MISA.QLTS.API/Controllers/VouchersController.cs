@@ -76,7 +76,7 @@ namespace MISA.QLTS.API.Controllers
             try
             {
                 var voucherResult = _voucherBL.InsertVoucher(voucherInsert);
-
+                
                 if (voucherResult.IsSuccess)
                 {
                     return StatusCode(StatusCodes.Status201Created, 1);
