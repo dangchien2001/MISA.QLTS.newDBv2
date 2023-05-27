@@ -31,10 +31,9 @@ namespace MISA.QLTS.DL.AssetDL
         {
             // Khởi tạo câu lệnh sql
             var result = 0;
-            var stringFormat = $"('{string.Join("','", assetIds)}')";
-            var storedProcedureName = "Proc_Asset_DeleteList";
+            var sql = $"DELETE FROM asset WHERE asset_id IN @p_list";
             var parameters = new DynamicParameters();
-            parameters.Add("p_list", stringFormat);
+            parameters.Add("p_list", assetIds);
             using (var mySqlConnection = new MySqlConnection(DataBaseContext.connectionString))
             {
                 mySqlConnection.Open();
@@ -43,7 +42,7 @@ namespace MISA.QLTS.DL.AssetDL
                 {
           
                     
-                        result = mySqlConnection.Execute(storedProcedureName, parameters, transaction: transaction, commandType: System.Data.CommandType.StoredProcedure);
+                        result = mySqlConnection.Execute(sql, parameters, transaction: transaction, commandType: CommandType.Text);
 
                     if (result == assetIds.Count)
                     {
@@ -59,9 +58,7 @@ namespace MISA.QLTS.DL.AssetDL
                     }
 
                 }
-                mySqlConnection.Close();
             }
-            return result;
         }
 
 

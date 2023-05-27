@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MISA.QLTS.BL.AccountSystemBL;
 using MISA.QLTS.BL.AssetBL;
 using MISA.QLTS.BL.AssetCategoryBL;
 using MISA.QLTS.BL.BaseBL;
 using MISA.QLTS.BL.BudgetPlaceBL;
 using MISA.QLTS.BL.DepartmentBL;
 using MISA.QLTS.BL.VoucherBL;
-using MISA.QLTS.BL.VoucherBL;
 using MISA.QLTS.BL.VoucherDetailBL;
+using MISA.QLTS.DL.AccountSystemDL;
 using MISA.QLTS.DL.AssetCategoryDL;
 using MISA.QLTS.DL.AssetDL;
 using MISA.QLTS.DL.BaseDL;
@@ -66,6 +67,10 @@ builder.Services.AddScoped<IVoucherDetailDL, VoucherDetailDL>();
 
 builder.Services.AddScoped<IBudgetPlaceBL, BudgetPlaceBL>();
 builder.Services.AddScoped<IBudgetPlaceDL, BudgetPlaceDL>();
+
+builder.Services.AddScoped<IAccountSystemBL, AccountSystemBL>();
+builder.Services.AddScoped<IAccountSystemDL, AccountSystemDL>();
+
 
 var app = builder.Build();
 
